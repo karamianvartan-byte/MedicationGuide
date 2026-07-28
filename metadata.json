@@ -1,6 +1,6 @@
 {
   "name": "Фарма-Гид",
-  "description": "Справочник лекарственных средств с поиском по симптомам и алфавитному указателю",
+  "description": "Справочник лекарственных средств для людей и ветеринарное руководство по лечению животных",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

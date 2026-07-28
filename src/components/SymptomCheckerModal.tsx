@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Medication } from '../types';
 import { SYMPTOM_CATEGORIES } from '../data/medications';
 import { X, Activity, ChevronRight, Check, AlertCircle, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 interface SymptomCheckerModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
   medications,
   onSelectMedication
 }) => {
+  const { t } = useLanguage();
   if (!isOpen) return null;
 
   const [step, setStep] = useState<number>(1);
@@ -71,15 +73,15 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-serif font-bold text-[#4A5D44]">
-                Интерактивный подбор по симптомам
+                {t('symptomCheckerTitle')}
               </h2>
-              <p className="text-xs text-[#A09B8E]">Шаг {step} из 3</p>
+              <p className="text-xs text-[#A09B8E]">{step} / 3</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full bg-white border border-[#D1CCBF] text-[#A09B8E] hover:text-[#3E4238]"
+            className="p-1.5 rounded-full bg-white border border-[#D1CCBF] text-[#A09B8E] hover:text-[#3E4238] cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -93,10 +95,10 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-serif font-bold text-[#4A5D44] mb-1">
-                  1. Укажите, что вас беспокоит
+                  1. {t('symptomsLabel')}
                 </h3>
                 <p className="text-xs text-[#707060]">
-                  Выберите основные категории или несколько конкретных симптомов:
+                  {t('symptomCheckerTitle')}
                 </p>
               </div>
 
@@ -110,7 +112,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
                       onClick={() => {
                         setSelectedCategory(isSelected ? null : cat.name);
                       }}
-                      className={`p-3 text-left rounded-2xl border transition-all text-xs font-semibold ${
+                      className={`p-3 text-left rounded-2xl border transition-all text-xs font-semibold cursor-pointer ${
                         isSelected
                           ? 'bg-[#E9EDDC] border-[#7B8E6A] text-[#4A5D44] shadow-2xs'
                           : 'bg-white border-[#E0DBCF] text-[#3E4238] hover:bg-[#F5F2EB]'
@@ -126,7 +128,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
               {selectedCategory && (
                 <div className="pt-3 border-t border-[#E0DBCF]">
                   <span className="text-xs font-bold uppercase tracking-wider text-[#A09B8E] block mb-2">
-                    Уточните конкретные проявления ({selectedCategory}):
+                    {selectedCategory}:
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {SYMPTOM_CATEGORIES.find(c => c.name === selectedCategory)?.symptoms.map((sym) => {
@@ -135,7 +137,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
                         <button
                           key={sym}
                           onClick={() => toggleSymptom(sym)}
-                          className={`px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1.5 ${
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium border flex items-center gap-1.5 cursor-pointer ${
                             isChecked
                               ? 'bg-[#7B8E6A] text-white border-[#7B8E6A]'
                               : 'bg-white text-[#3E4238] border-[#D1CCBF] hover:bg-[#F5F2EB]'
@@ -157,49 +159,43 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
             <div className="space-y-4">
               <div>
                 <h3 className="text-base font-serif font-bold text-[#4A5D44] mb-1">
-                  2. Возрастная категория и параметры
+                  2. {t('ageRestrictionLabel')}
                 </h3>
-                <p className="text-xs text-[#707060]">
-                  Это поможет отфильтровать препараты с возрастными ограничениями:
-                </p>
               </div>
 
               {/* Age Group Buttons */}
               <div className="grid grid-cols-3 gap-3">
                 <button
                   onClick={() => setAgeGroup('adult')}
-                  className={`p-4 rounded-2xl border text-center transition-all ${
+                  className={`p-4 rounded-2xl border text-center transition-all cursor-pointer ${
                     ageGroup === 'adult'
                       ? 'bg-[#E9EDDC] border-[#7B8E6A] text-[#4A5D44] font-bold'
                       : 'bg-white border-[#E0DBCF] text-[#3E4238]'
                   }`}
                 >
-                  <div className="text-sm">Взрослый</div>
-                  <div className="text-[10px] text-[#707060]">От 18 до 65 лет</div>
+                  <div className="text-sm">18-65</div>
                 </button>
 
                 <button
                   onClick={() => setAgeGroup('child')}
-                  className={`p-4 rounded-2xl border text-center transition-all ${
+                  className={`p-4 rounded-2xl border text-center transition-all cursor-pointer ${
                     ageGroup === 'child'
                       ? 'bg-[#E9EDDC] border-[#7B8E6A] text-[#4A5D44] font-bold'
                       : 'bg-white border-[#E0DBCF] text-[#3E4238]'
                   }`}
                 >
-                  <div className="text-sm">Ребёнок</div>
-                  <div className="text-[10px] text-[#707060]">До 18 лет</div>
+                  <div className="text-sm">&lt; 18</div>
                 </button>
 
                 <button
                   onClick={() => setAgeGroup('elderly')}
-                  className={`p-4 rounded-2xl border text-center transition-all ${
+                  className={`p-4 rounded-2xl border text-center transition-all cursor-pointer ${
                     ageGroup === 'elderly'
                       ? 'bg-[#E9EDDC] border-[#7B8E6A] text-[#4A5D44] font-bold'
                       : 'bg-white border-[#E0DBCF] text-[#3E4238]'
                   }`}
                 >
-                  <div className="text-sm">Пожилой</div>
-                  <div className="text-[10px] text-[#707060]">Старше 65 лет</div>
+                  <div className="text-sm">65+</div>
                 </button>
               </div>
 
@@ -212,7 +208,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
                   className="rounded text-[#7B8E6A] focus:ring-[#7B8E6A]"
                 />
                 <span className="text-xs font-semibold text-[#3E4238]">
-                  Показывать только безрецептурные препараты (OTC)
+                  OTC Only (Без рецепта)
                 </span>
               </label>
             </div>
@@ -224,17 +220,17 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-serif font-bold text-[#4A5D44]">
-                    Рекомендуемые препараты
+                    {t('vetTabMeds')}
                   </h3>
                   <p className="text-xs text-[#707060]">
-                    Найдено подходящих средств: {matchedMedications.length}
+                    {matchedMedications.length}
                   </p>
                 </div>
                 <button
                   onClick={resetAll}
-                  className="text-xs text-[#7B8E6A] hover:underline font-semibold"
+                  className="text-xs text-[#7B8E6A] hover:underline font-semibold cursor-pointer"
                 >
-                  Сбросить подбор
+                  {t('resetFilters')}
                 </button>
               </div>
 
@@ -258,7 +254,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
                         </div>
                         <p className="text-xs text-[#A09B8E]">{med.activeSubstance}</p>
                         <p className="text-[11px] text-[#707060] mt-1 line-clamp-1">
-                          Применяется при: {med.symptoms.slice(0, 3).join(', ')}
+                          {med.symptoms.slice(0, 3).join(', ')}
                         </p>
                       </div>
 
@@ -267,16 +263,16 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
                           onClose();
                           onSelectMedication(med);
                         }}
-                        className="px-3 py-1.5 bg-[#7B8E6A] text-white rounded-full font-bold text-xs hover:bg-[#687B58] transition-colors shrink-0"
+                        className="px-3 py-1.5 bg-[#7B8E6A] text-white rounded-full font-bold text-xs hover:bg-[#687B58] transition-colors shrink-0 cursor-pointer"
                       >
-                        Инструкция
+                        {t('viewInstructionBtn')}
                       </button>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="p-6 text-center bg-[#F5F2EB] rounded-2xl border border-[#E0DBCF] text-xs text-[#707060]">
-                   По выбранным параметрам подходящих препаратов не найдено. Попробуйте сбросить фильтры.
+                   {t('notFoundText')}
                 </div>
               )}
 
@@ -284,7 +280,7 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
               <div className="p-3 bg-[#FBEFF2] border border-[#F2D7D7] rounded-xl text-[11px] text-[#B87A7A] flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>
-                  Результаты подбора являются справочными. Обязательно проконсультируйтесь с лечащим врачом перед приёмом любого лекарственного средства.
+                  {t('consultDoctorDisclaimer')}
                 </span>
               </div>
             </div>
@@ -297,9 +293,9 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
           {step > 1 ? (
             <button
               onClick={() => setStep(step - 1)}
-              className="px-4 py-2 border border-[#D1CCBF] rounded-full text-xs font-semibold text-[#3E4238] hover:bg-white flex items-center gap-1"
+              className="px-4 py-2 border border-[#D1CCBF] rounded-full text-xs font-semibold text-[#3E4238] hover:bg-white flex items-center gap-1 cursor-pointer"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Назад
+              <ArrowLeft className="w-3.5 h-3.5" />
             </button>
           ) : (
             <div />
@@ -308,16 +304,16 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
           {step < 3 ? (
             <button
               onClick={() => setStep(step + 1)}
-              className="px-5 py-2 bg-[#7B8E6A] hover:bg-[#687B58] text-white rounded-full text-xs font-bold transition-colors flex items-center gap-1 shadow-xs"
+              className="px-5 py-2 bg-[#7B8E6A] hover:bg-[#687B58] text-white rounded-full text-xs font-bold transition-colors flex items-center gap-1 shadow-xs cursor-pointer"
             >
-              Далее <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           ) : (
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-[#4A5D44] text-white rounded-full text-xs font-bold hover:bg-[#3B4A36]"
+              className="px-5 py-2 bg-[#4A5D44] text-white rounded-full text-xs font-bold hover:bg-[#3B4A36] cursor-pointer"
             >
-              Готово
+              {t('closeBtn')}
             </button>
           )}
         </div>
@@ -326,3 +322,4 @@ export const SymptomCheckerModal: React.FC<SymptomCheckerModalProps> = ({
     </div>
   );
 };
+
