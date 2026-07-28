@@ -1,0 +1,6 @@
+{
+  "name": "Фарма-Гид",
+  "description": "Справочник лекарственных средств с поиском по симптомам и алфавитному указателю",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
